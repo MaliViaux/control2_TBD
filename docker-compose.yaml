@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./Backtend-Control2-TBD
+      dockerfile: dockerfile
+    image: maliviaux/backend-control2:latest
+    ports:
+        - "8090:8090" 
+    environment:
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/control2
+        - SPRING_DATASOURCE_USERNAME=postgres
+        - SPRING_DATASOURCE_PASSWORD=1234
+  app:
+    build:
+      context: ./Frontend-Control2-TBD
+      dockerfile: dockerfile
+    image: maliviaux/frontend-control2:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+  
+  postgres:
+    image: postgres:15
+    container_name: postgres-control2
+    environment:
+      POSTGRES_DB: control2  # This will create the database automatically
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - app-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d control2"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
