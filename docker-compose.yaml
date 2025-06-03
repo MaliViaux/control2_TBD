@@ -7,11 +7,16 @@ services:
       dockerfile: dockerfile
     image: maliviaux/backend-control2:latest
     ports:
-        - "8090:8090" 
+      - "8090:8090"
     environment:
-        - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/control2
-        - SPRING_DATASOURCE_USERNAME=postgres
-        - SPRING_DATASOURCE_PASSWORD=1234
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/control2
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=1234
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+
   app:
     build:
       context: ./Frontend-Control2-TBD
@@ -22,12 +27,16 @@ services:
     environment:
       - NODE_ENV=production
     restart: unless-stopped
-  
+    networks:
+      - app-network
+    depends_on:
+      - backend
+
   postgres:
     image: postgis/postgis:15-3.3
     container_name: postgres-control2
     environment:
-      POSTGRES_DB: control2  # This will create the database automatically
+      POSTGRES_DB: control2
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
       PGDATA: /var/lib/postgresql/data/pgdata
