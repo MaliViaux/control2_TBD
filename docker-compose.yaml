@@ -24,7 +24,7 @@ services:
     restart: unless-stopped
   
   postgres:
-    image: postgres:15
+    image: postgis/postgis:15-3.3
     container_name: postgres-control2
     environment:
       POSTGRES_DB: control2  # This will create the database automatically
