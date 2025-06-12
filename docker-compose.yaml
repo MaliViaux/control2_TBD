@@ -3,7 +3,7 @@ version: '3.8'
 services:
   backend:
     build:
-      context: ./Backtend-Control2-TBD
+      context: ./Backend-Control2-TBD
       dockerfile: dockerfile
     image: maliviaux/backend-control2:latest
     ports:
